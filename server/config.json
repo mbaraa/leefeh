@@ -1,0 +1,10 @@
+{
+  "port_number": "8080",
+  "db_user": "root",
+  "db_host": "db",
+  "db_password": "hello",
+  "allowed_clients": "*",
+  "machine_ip": "",
+  "jwt_secret": "top secret",
+  "development": true
+}

@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  db:
+    image: "mariadb:10.6"
+    container_name: "db"
+    restart: "always"
+    environment:
+      MARIADB_ROOT_PASSWORD: "hello"
+      MARIADB_DATABASE: "salsa"
+    ports:
+      - "3306"
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+      # - ./server/data/db/init.sql:/docker-entrypoint-initdb.d
+    networks:
+      - salsa
+
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: "./server"
+    container_name: "app"
+    depends_on:
+      - db
+    # restart: "unless-stopped"
+    restart: "always"
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    tty: true
+    networks:
+      - salsa
+
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: "./client"
+    depends_on:
+      - app
+    # restart: "unless-stopped"
+    restart: "always"
+    ports:
+      - "8081:3000"
+    stdin_open: true
+    tty: true
+
+volumes:
+  db-config:
+  db-data:
+
+networks:
+  salsa: {}

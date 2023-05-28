@@ -1,0 +1,21 @@
+name: go test
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+
+jobs:
+  Codecov-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: generate coverage
+        run: |
+          cd server
+          go test ./... -race -covermode=atomic -coverprofile=coverage.out
